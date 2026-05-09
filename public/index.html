@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cinematic Presentation - MAS WAHAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { overflow: hidden; color: white; font-family: 'Montserrat', sans-serif; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; }
+
+        /* --- BACKGROUND CINEMATIC --- */
+        .bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #020c11; z-index: 1; overflow: hidden; }
+        .bg-wrapper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, rgba(13, 75, 94, 0.6) 0%, rgba(3, 15, 20, 0.8) 60%, #000 100%); }
+        .dust-layer { position: absolute; width: 100%; height: 200%; top: 0; left: 0; background-image: radial-gradient(circle, rgba(255, 170, 0, 0.5) 1px, transparent 1px), radial-gradient(circle, rgba(255, 140, 0, 0.3) 1.5px, transparent 1.5px); background-size: 100px 120px, 70px 90px; animation: driftUp 40s linear infinite; }
+        .bokeh { position: absolute; border-radius: 50%; background: rgba(255, 130, 0, 0.25); box-shadow: 0 0 30px rgba(255, 120, 0, 0.4); animation: floatBokeh infinite linear; }
+        .b1 { width: 120px; height: 120px; left: 10%; bottom: -150px; filter: blur(8px); animation-duration: 28s; animation-delay: -5s; }
+        .b2 { width: 250px; height: 250px; left: 35%; bottom: -300px; filter: blur(18px); animation-duration: 45s; animation-delay: -20s; }
+        .b3 { width: 180px; height: 180px; left: 75%; bottom: -200px; filter: blur(12px); animation-duration: 38s; animation-delay: -10s; }
+        @keyframes driftUp { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+        @keyframes floatBokeh { 0% { transform: translateY(0) translateX(0); } 100% { transform: translateY(-120vh) translateX(-5vw); } }
+
+        /* --- STAGE FRAME --- */
+        .stage-frame { position: relative; z-index: 10; width: 90%; height: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* --- SLIDE 0: WELCOME SCREEN --- */
+        #welcome-screen {
+            text-align: center; display: none; 
+            flex-direction: column; align-items: center;
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+        .welcome-title { font-family: 'Cinzel', serif; font-size: 5rem; color: #ffd700; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
+        .welcome-subtitle { font-size: 2.5rem; letter-spacing: 8px; color: #cbd5e1; text-transform: uppercase; margin-bottom: 50px; }
+        
+        .qr-big-box {
+            background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3); backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .qr-big-box img { width: 220px; height: 220px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
+        .qr-big-box p { font-size: 1.2rem; color: #ffd700; font-weight: 600; letter-spacing: 2px; }
+
+        /* --- STUDENT SLIDE --- */
+        #student-slide {
+            display: none; flex-direction: column; align-items: center; text-align: center;
+            transition: all 0.8s ease-in-out; opacity: 0;
+        }
+        #student-slide.show { display: flex; opacity: 1; }
+        
+        .foto { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; margin-bottom: 30px; border: 8px solid #ffd700; box-shadow: 0 0 50px rgba(255, 140, 0, 0.5); }
+        .nama { font-family: 'Cinzel', serif; font-size: 3.5rem; color: white; margin-bottom: 10px; }
+        .jurusan-badge { display: inline-block; background: rgba(255, 140, 0, 0.2); color: #ffd700; border: 1px solid #ffd700; padding: 5px 25px; border-radius: 30px; font-weight: 600; margin-bottom: 20px; }
+        .pesan { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; color: #e2e8f0; max-width: 800px; }
+
+        .qr-small { position: absolute; bottom: 0; right: 0; display: none; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,215,0,0.2); }
+        .qr-small img { width: 70px; height: 70px; background: white; padding: 3px; border-radius: 5px; }
+        .qr-small p { font-size: 0.6rem; color: #ffd700; margin-top: 5px; font-weight: bold; }
+
+        /* --- REACTIONS (FIXED) --- */
+        #reaction-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; overflow: hidden; }
+        .floating-emoji { position: absolute; bottom: -60px; font-size: 4.5rem; animation: floatUp ease-in forwards; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
+        
+        /* INI KODE YANG TERHAPUS SEBELUMNYA */
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: translateY(-110vh) scale(1) rotate(20deg); opacity: 0; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+    
+    <div class="bg-wrapper">
+        <div class="dust-layer"></div>
+        <div class="bokeh b1"></div><div class="bokeh b2"></div><div class="bokeh b3"></div>
+    </div>
+
+    <div class="stage-frame">
+        <div id="welcome-screen">
+            <p class="welcome-subtitle">Selamat Datang di Acara</p>
+            <h1 class="welcome-title">PELEPASAN SISWA KELAS IX</h1>
+            <h2 class="welcome-subtitle">MTSS WAHID HASYIM BALUNG</h2>
+            
+            <div class="qr-big-box">
+                <img class="qr-code-img" src="" alt="QR">
+                <p>SCAN UNTUK BERI REAKSI</p>
+            </div>
+        </div>
+
+        <div id="student-slide">
+            <img src="" class="foto" id="foto-siswa" alt="Siswa">
+            <h1 class="nama" id="nama-siswa">Nama</h1>
+            <div class="jurusan-badge" id="jurusan-siswa">Jurusan</div>
+            <p class="pesan" id="pesan-siswa">"Pesan..."</p>
+            
+            <div class="qr-small" id="qr-small-box" style="display: block;">
+                <img class="qr-code-img" src="" alt="QR">
+                <p>REAKSI</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="reaction-container"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io(); 
+        const dataSiswa = [
+            { nama: "Meylinda Puspita", jurusan: "12 DKV 1", pesan: "Motivasi terbesar dalam kehidupan adalah diri sendiri. Teruslah melangkah maju.", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=80" },
+            { nama: "Ahmad Rizky", jurusan: "12 TKJ 2", pesan: "Terima kasih kepada bapak ibu guru yang tak lelah membimbing kami. Sukses selalu!", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80" }
+        ];
+
+        let currentIndex = -1; 
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const studentSlide = document.getElementById('student-slide');
+
+        function updateDisplay() {
+            if (currentIndex === -1) {
+                welcomeScreen.style.display = 'flex';
+                studentSlide.classList.remove('show');
+                studentSlide.style.display = 'none';
+                
+                socket.emit('slide_changed', { isWelcome: true }); 
+            } else {
+                welcomeScreen.style.display = 'none';
+                studentSlide.style.display = 'flex';
+                
+                const siswa = dataSiswa[currentIndex];
+                document.getElementById('nama-siswa').innerText = siswa.nama;
+                document.getElementById('jurusan-siswa').innerText = siswa.jurusan;
+                document.getElementById('pesan-siswa').innerText = `"${siswa.pesan}"`;
+                document.getElementById('foto-siswa').src = siswa.foto;
+
+                setTimeout(() => { studentSlide.classList.add('show'); }, 50);
+                
+                siswa.isWelcome = false; 
+                socket.emit('slide_changed', siswa);
+            }
+        }
+
+        socket.on('connect', () => { 
+            updateDisplay(); 
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                if (currentIndex < dataSiswa.length - 1) {
+                    currentIndex++;
+                    updateDisplay();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentIndex > -1) {
+                    currentIndex--;
+                    updateDisplay();
+                }
+            }
+        });
+
+        window.onload = () => {
+            const host = window.location.host;
+            const remoteLink = `http://${host}/remote.html`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(remoteLink)}&margin=1`;
+            
+            document.querySelectorAll('.qr-code-img').forEach(img => {
+                img.src = qrUrl;
+            });
+        };
+
+        const container = document.getElementById('reaction-container');
+        socket.on('show_reaction', (emoji) => {
+            const el = document.createElement('div');
+            el.innerText = emoji; el.classList.add('floating-emoji');
+            el.style.left = `${Math.random() * 90}%`;
+            el.style.animationDuration = `${Math.random() * 2 + 3}s`; 
+            container.appendChild(el);
+            setTimeout(() => el.remove(), 5000);
+        });
+    </script>
+</body>
+</html>
