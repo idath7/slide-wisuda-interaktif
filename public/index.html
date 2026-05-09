@@ -3,102 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <title>Cinematic Presentation - MAS WAHAS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { overflow: hidden; color: white; font-family: 'Montserrat', sans-serif; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; }
 
-        /* --- BACKGROUND CINEMATIC --- */
+        /* --- BACKGROUND & BOKEH --- */
         .bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #020c11; z-index: 1; overflow: hidden; }
         .bg-wrapper::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% 40%, rgba(13, 75, 94, 0.6) 0%, rgba(3, 15, 20, 0.8) 60%, #000 100%); }
         .dust-layer { position: absolute; width: 100%; height: 200%; top: 0; left: 0; background-image: radial-gradient(circle, rgba(255, 170, 0, 0.5) 1px, transparent 1px), radial-gradient(circle, rgba(255, 140, 0, 0.3) 1.5px, transparent 1.5px); background-size: 100px 120px, 70px 90px; animation: driftUp 40s linear infinite; }
         .bokeh { position: absolute; border-radius: 50%; background: rgba(255, 130, 0, 0.25); box-shadow: 0 0 30px rgba(255, 120, 0, 0.4); animation: floatBokeh infinite linear; }
-        .b1 { width: 120px; height: 120px; left: 10%; bottom: -150px; filter: blur(8px); animation-duration: 28s; animation-delay: -5s; }
-        .b2 { width: 250px; height: 250px; left: 35%; bottom: -300px; filter: blur(18px); animation-duration: 45s; animation-delay: -20s; }
-        .b3 { width: 180px; height: 180px; left: 75%; bottom: -200px; filter: blur(12px); animation-duration: 38s; animation-delay: -10s; }
+        .b1 { width: 120px; height: 120px; left: 10%; bottom: -150px; animation-duration: 28s; }
+        .b2 { width: 250px; height: 250px; left: 35%; bottom: -300px; animation-duration: 45s; }
         @keyframes driftUp { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
-        @keyframes floatBokeh { 0% { transform: translateY(0) translateX(0); } 100% { transform: translateY(-120vh) translateX(-5vw); } }
+        @keyframes floatBokeh { 0% { transform: translateY(0); } 100% { transform: translateY(-120vh); } }
 
         /* --- STAGE FRAME --- */
-        .stage-frame { position: relative; z-index: 10; width: 90%; height: 90%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .stage-frame { position: relative; z-index: 10; width: 95%; max-width: 1200px; height: 95%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 
-        /* --- SLIDE 0: WELCOME SCREEN --- */
-        #welcome-screen {
-            text-align: center; display: none; 
-            flex-direction: column; align-items: center;
-            animation: fadeIn 1.5s ease-out forwards;
-        }
-        .welcome-title { font-family: 'Cinzel', serif; font-size: 5rem; color: #ffd700; margin-bottom: 10px; text-shadow: 0 0 30px rgba(212, 175, 55, 0.6); }
-        .welcome-subtitle { font-size: 2.5rem; letter-spacing: 8px; color: #cbd5e1; text-transform: uppercase; margin-bottom: 50px; }
+        /* --- WELCOME SCREEN --- */
+        #welcome-screen { text-align: center; display: none; flex-direction: column; align-items: center; }
+        .welcome-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+        .welcome-title { font-family: 'Cinzel', serif; font-size: 4.5rem; color: #ffd700; text-shadow: 0 0 30px rgba(212, 175, 55, 0.6); margin-bottom: 5px; }
+        .welcome-subtitle { font-size: 1.2rem; letter-spacing: 8px; color: #cbd5e1; text-transform: uppercase; margin-bottom: 25px; }
         
-        .qr-big-box {
-            background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.3); backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; align-items: center;
+        /* --- COUNTDOWN TIMER --- */
+        .countdown-wrapper { display: flex; gap: 15px; margin-bottom: 25px; }
+        .count-box { 
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255, 215, 0, 0.2); 
+            padding: 15px 20px; border-radius: 15px; backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center; min-width: 90px;
         }
-        .qr-big-box img { width: 220px; height: 220px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 20px; }
-        .qr-big-box p { font-size: 1.2rem; color: #ffd700; font-weight: 600; letter-spacing: 2px; }
+        .count-num { font-family: 'Cinzel', serif; font-size: 2.5rem; color: #ffd700; text-shadow: 0 0 15px rgba(255,215,0,0.5); font-weight: bold; line-height: 1; margin-bottom: 5px; }
+        .count-label { font-size: 0.75rem; color: #cbd5e1; letter-spacing: 2px; font-weight: 600; }
+
+        /* --- QR BOX BESAR --- */
+        .qr-big-box { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255, 215, 0, 0.3); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; }
+        .qr-big-box img { width: 150px; height: 150px; background: white; padding: 10px; border-radius: 10px; margin-bottom: 15px; }
 
         /* --- STUDENT SLIDE --- */
-        #student-slide {
-            display: none; flex-direction: column; align-items: center; text-align: center;
-            transition: all 0.8s ease-in-out; opacity: 0;
+        #student-slide { display: none; flex-direction: column; align-items: center; width: 100%; }
+        .slide-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center;}
+        .header-logo { width: 70px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));}
+        .title-main { font-family: 'Cinzel', serif; font-size: 2.2rem; color: #ffd700; letter-spacing: 4px; }
+        .title-school { font-size: 1.1rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 3px; }
+
+        .student-card {
+            display: flex; align-items: center; background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px); border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 40px; padding: 40px; width: 950px; margin-bottom: 25px;
         }
-        #student-slide.show { display: flex; opacity: 1; }
+        .foto-container { flex-shrink: 0; width: 200px; height: 300px; border-radius: 20px; overflow: hidden; border: 4px solid #ffd700; }
+        .foto { width: 100%; height: 100%; object-fit: cover; }
+        .info-section { margin-left: 50px; text-align: left; flex-grow: 1; }
         
-        .foto { width: 320px; height: 320px; border-radius: 50%; object-fit: cover; margin-bottom: 30px; border: 8px solid #ffd700; box-shadow: 0 0 50px rgba(255, 140, 0, 0.5); }
-        .nama { font-family: 'Cinzel', serif; font-size: 3.5rem; color: white; margin-bottom: 10px; }
-        .jurusan-badge { display: inline-block; background: rgba(255, 140, 0, 0.2); color: #ffd700; border: 1px solid #ffd700; padding: 5px 25px; border-radius: 30px; font-weight: 600; margin-bottom: 20px; }
-        .pesan { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; color: #e2e8f0; max-width: 800px; }
-
-        .qr-small { position: absolute; bottom: 0; right: 0; display: none; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid rgba(255,215,0,0.2); }
-        .qr-small img { width: 70px; height: 70px; background: white; padding: 3px; border-radius: 5px; }
-        .qr-small p { font-size: 0.6rem; color: #ffd700; margin-top: 5px; font-weight: bold; }
-
-        /* --- REACTIONS (FIXED) --- */
-        #reaction-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; overflow: hidden; }
-        .floating-emoji { position: absolute; bottom: -60px; font-size: 4.5rem; animation: floatUp ease-in forwards; filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4)); }
+        /* --- STYLE BARU UNTUK NAMA (EFEK KETIK) --- */
+        .nama { 
+            font-family: 'Cinzel', serif; font-size: 3.5rem; color: #ffd700; 
+            line-height: 1.1; margin-bottom: 30px; 
+            min-height: 3.9rem; /* Jaga tinggi agar tidak goyang saat mengetik */
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            position: relative;
+        }
         
-        /* INI KODE YANG TERHAPUS SEBELUMNYA */
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            100% { transform: translateY(-110vh) scale(1) rotate(20deg); opacity: 0; }
+        /* Efek Kilau/Glitch setelah pengetikan selesai */
+        .nama.typing-finished {
+            animation: textFlashGlitch 1.5s ease-out forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes textFlashGlitch {
+            0% { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.5); transform: scale(1); filter: contrast(1); }
+            5% { color: white; text-shadow: 0 0 40px rgba(255, 255, 255, 1); transform: scale(1.02); filter: contrast(1.5); }
+            10% { text-shadow: 4px 0 rgba(255,69,0,0.6), -4px 0 rgba(0,255,255,0.6); }
+            15% { color: #ffd700; text-shadow: 0 0 25px rgba(255, 215, 0, 0.8); transform: scale(1); filter: contrast(1); }
+            100% { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.6); }
+        }
+        /* ------------------------------------------- */
+
+        .data-item { margin-bottom: 15px; display: flex; align-items: flex-end; border-bottom: 1px solid rgba(255, 215, 0, 0.3); padding-bottom: 5px; }
+        .label { font-size: 0.8rem; color: #94a3b8; width: 150px; text-transform: uppercase; }
+        .value { font-size: 1.4rem; color: #f8fafc; flex-grow: 1; }
+        .pesan { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.7rem; color: #e2e8f0; text-align: center; max-width: 850px; }
+
+        /* --- CONTROLS UI --- */
+        .admin-controls { position: absolute; bottom: 20px; left: 20px; z-index: 100; display: flex; gap: 10px; align-items: center; max-width: 80vw; }
+        .btn-home { background: rgba(255, 215, 0, 0.15); border: 1px solid rgba(255, 215, 0, 0.5); color: #ffd700; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; backdrop-filter: blur(5px); flex-shrink: 0; }
+        .btn-home:hover { background: #ffd700; color: black; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
+        .jump-container { display: flex; gap: 5px; background: rgba(255,255,255,0.03); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(5px); flex-shrink: 0; }
+        .jump-input { width: 60px; background: transparent; border: none; color: #ffd700; font-weight: bold; text-align: center; outline: none; font-size: 1rem; }
+        .jump-input::placeholder { color: rgba(255, 215, 0, 0.3); }
+        .jump-input::-webkit-outer-spin-button, .jump-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .btn-jump { background: rgba(255, 215, 0, 0.15); border: 1px solid rgba(255,215,0,0.3); color: #ffd700; padding: 5px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-jump:hover { background: #ffd700; color: black; }
+        .student-nav { display: flex; gap: 5px; background: rgba(255,255,255,0.03); padding: 5px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); max-width: 550px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: rgba(255, 215, 0, 0.5) transparent; scroll-behavior: smooth; }
+        .student-nav::-webkit-scrollbar { height: 4px; }
+        .student-nav::-webkit-scrollbar-thumb { background: rgba(255, 215, 0, 0.3); border-radius: 10px; }
+        .student-nav::-webkit-scrollbar-thumb:hover { background: #ffd700; }
+        .nav-dot { width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: rgba(255,255,255,0.08); border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.3s; color: rgba(255,255,255,0.6); }
+        .nav-dot.active { background: #ffd700; color: black; box-shadow: 0 0 15px rgba(255,215,0,0.6); }
+        .nav-dot:hover:not(.active) { background: rgba(255,255,255,0.2); color: white; }
+
+        /* --- QR POJOK --- */
+        .qr-small { position: absolute; bottom: 20px; right: 20px; background: rgba(2, 12, 17, 0.6); padding: 12px; border-radius: 18px; border: 1px solid rgba(255, 215, 0, 0.3); backdrop-filter: blur(10px); text-align: center; z-index: 50; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; }
+        .qr-small img { width: 70px; height: 70px; background: white; padding: 4px; border-radius: 8px; }
+        
+        /* ANIMASI REAKSI */
+        #reaction-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; overflow: hidden; }
+        .floating-emoji { position: absolute; bottom: -60px; font-size: 4.5rem; animation: floatUp ease-in forwards; filter: drop-shadow(0 0 10px rgba(255,255,255,0.5)); }
+        
+        @keyframes floatUp { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; } }
+        
+        /* Transisi Masuk Slide (Focus Pull) */
+        .slide-enter { animation: lensFocusIn 1s ease-out forwards; }
+        .slide-exit { animation: lensFocusOut 0.3s ease-in forwards; }
+        @keyframes lensFocusIn { 0% { opacity: 0; transform: scale(1.05); filter: blur(15px); } 100% { opacity: 1; transform: scale(1); filter: blur(0); } }
+        @keyframes lensFocusOut { 0% { opacity: 1; transform: scale(1); filter: blur(0); } 100% { opacity: 0; transform: scale(0.95); filter: blur(10px); } }
     </style>
 </head>
 <body>
     
     <div class="bg-wrapper">
         <div class="dust-layer"></div>
-        <div class="bokeh b1"></div><div class="bokeh b2"></div><div class="bokeh b3"></div>
+        <div class="bokeh b1"></div><div class="bokeh b2"></div>
+    </div>
+
+    <div class="admin-controls">
+        <button class="btn-home" onclick="goToHome()">HOME</button>
+        <div class="jump-container">
+            <input type="number" id="jump-input" class="jump-input" placeholder="No..." min="1">
+            <button class="btn-jump" onclick="jumpFromInput()">GO</button>
+        </div>
+        <div class="student-nav" id="student-nav-panel"></div>
     </div>
 
     <div class="stage-frame">
         <div id="welcome-screen">
-            <p class="welcome-subtitle">Selamat Datang di Acara</p>
-            <h1 class="welcome-title">PELEPASAN SISWA KELAS IX</h1>
-            <h2 class="welcome-subtitle">MTSS WAHID HASYIM BALUNG</h2>
-            
+            <img src="logo.png" class="welcome-logo" alt="Logo Sekolah"> 
+            <p class="welcome-subtitle" style="margin-bottom: 5px;">Selamat Datang di Acara</p>
+            <h1 class="welcome-title">MAS WAHAS</h1>
+            <p class="welcome-subtitle">Pelepasan Siswa Kelas XII</p>
+
+            <div class="countdown-wrapper" id="countdown-container">
+                <div class="count-box"><span class="count-num" id="cd-days">00</span><span class="count-label">HARI</span></div>
+                <div class="count-box"><span class="count-num" id="cd-hours">00</span><span class="count-label">JAM</span></div>
+                <div class="count-box"><span class="count-num" id="cd-minutes">00</span><span class="count-label">MENIT</span></div>
+                <div class="count-box"><span class="count-num" id="cd-seconds">00</span><span class="count-label">DETIK</span></div>
+            </div>
+
             <div class="qr-big-box">
                 <img class="qr-code-img" src="" alt="QR">
-                <p>SCAN UNTUK BERI REAKSI</p>
+                <p style="color:#ffd700; font-weight:600; letter-spacing:2px; font-size:1rem;">SCAN UNTUK REAKSI</p>
             </div>
         </div>
 
         <div id="student-slide">
-            <img src="" class="foto" id="foto-siswa" alt="Siswa">
-            <h1 class="nama" id="nama-siswa">Nama</h1>
-            <div class="jurusan-badge" id="jurusan-siswa">Jurusan</div>
-            <p class="pesan" id="pesan-siswa">"Pesan..."</p>
-            
-            <div class="qr-small" id="qr-small-box" style="display: block;">
-                <img class="qr-code-img" src="" alt="QR">
-                <p>REAKSI</p>
+            <div class="slide-header">
+                <img src="logo.png" class="header-logo" alt="Logo"> 
+                <h2 class="title-main">PENYERAHAN HASIL BELAJAR</h2>
+                <h3 class="title-school">MAS WAHAS JEMBER</h3>
             </div>
+            <div class="student-card">
+                <div class="foto-container"><img src="" class="foto" id="foto-siswa"></div>
+                <div class="info-section">
+                    
+                    <h1 class="nama" id="nama-siswa"></h1>
+                    
+                    <div class="data-item"><span class="label">Kelas</span><span class="value" id="kelas-siswa"></span></div>
+                    <div class="data-item"><span class="label">Orang Tua</span><span class="value" id="ortu-siswa"></span></div>
+                </div>
+            </div>
+            <p class="pesan" id="pesan-siswa"></p>
+        </div>
+
+        <div class="qr-small" id="qr-small-box">
+            <img class="qr-code-img" src="" alt="QR">
+            <p style="font-size:0.6rem; color:#ffd700; font-weight:bold; margin-top:5px; letter-spacing:1px;">REAKSI</p>
         </div>
     </div>
 
@@ -106,77 +186,187 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        const socket = io(); 
+        const socket = io();
+        
+        // Data sementara. Nanti diganti oleh API Laravel Anda.
         const dataSiswa = [
-            { nama: "Meylinda Puspita", jurusan: "12 DKV 1", pesan: "Motivasi terbesar dalam kehidupan adalah diri sendiri. Teruslah melangkah maju.", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=80" },
-            { nama: "Ahmad Rizky", jurusan: "12 TKJ 2", pesan: "Terima kasih kepada bapak ibu guru yang tak lelah membimbing kami. Sukses selalu!", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=80" }
+            { nama: "Meylinda Puspita", kelas: "XII DKV 1", ortu: "Bpk. Ahmad Subarjo", pesan: "Motivasi terbesar dalam kehidupan adalah diri sendiri. Teruslah melangkah maju.", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500" },
+            { nama: "Rizky Ramadhan", kelas: "XII TKJ 2", ortu: "Bpk. M. Mansyur", pesan: "Terima kasih kepada bapak ibu guru yang tak lelah membimbing kami. Sukses selalu!", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500" }
         ];
 
-        let currentIndex = -1; 
+        let currentIndex = localStorage.getItem('wisuda_pos') ? parseInt(localStorage.getItem('wisuda_pos')) : -1;
+
         const welcomeScreen = document.getElementById('welcome-screen');
         const studentSlide = document.getElementById('student-slide');
+        const qrSmallBox = document.getElementById('qr-small-box');
+        const navPanel = document.getElementById('student-nav-panel');
+        const jumpInput = document.getElementById('jump-input');
+        const namaSiswaEl = document.getElementById('nama-siswa'); // Pre-cache elemen nama
 
-        function updateDisplay() {
-            if (currentIndex === -1) {
-                welcomeScreen.style.display = 'flex';
-                studentSlide.classList.remove('show');
-                studentSlide.style.display = 'none';
-                
-                socket.emit('slide_changed', { isWelcome: true }); 
+        // --- FITUR COUNTDOWN ---
+        const countDownDate = new Date("Jun 20, 2026 08:00:00").getTime();
+        const x = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown-container").innerHTML = "<h2 style='color:#ffd700; font-family: Cinzel, serif; letter-spacing: 5px; text-shadow: 0 0 20px rgba(255,215,0,0.6);'>ACARA SEGERA DIMULAI</h2>";
             } else {
-                welcomeScreen.style.display = 'none';
-                studentSlide.style.display = 'flex';
-                
-                const siswa = dataSiswa[currentIndex];
-                document.getElementById('nama-siswa').innerText = siswa.nama;
-                document.getElementById('jurusan-siswa').innerText = siswa.jurusan;
-                document.getElementById('pesan-siswa').innerText = `"${siswa.pesan}"`;
-                document.getElementById('foto-siswa').src = siswa.foto;
+                document.getElementById("cd-days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById("cd-hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById("cd-minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById("cd-seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
+        }, 1000);
+        // -----------------------
 
-                setTimeout(() => { studentSlide.classList.add('show'); }, 50);
-                
-                siswa.isWelcome = false; 
-                socket.emit('slide_changed', siswa);
+        // ---------------------------------------------------------
+        // LOGIKA ANIMASI KETIK (TYPEWRITER) BARU
+        // ---------------------------------------------------------
+        function typingEffect(element, text, speed) {
+            element.textContent = ""; // Bersihkan dulu
+            element.classList.remove('typing-finished'); // Reset kelas animasi akhir
+            
+            let i = 0;
+            // Hapus interval sebelumnya jika operator bergerak terlalu cepat
+            if (element.typingInterval) clearInterval(element.typingInterval);
+            
+            element.typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    // Pengetikan selesai
+                    clearInterval(element.typingInterval);
+                    // Tambahkan kelas untuk memicu efek kilau akhir (CSS)
+                    element.classList.add('typing-finished');
+                }
+            }, speed);
+        }
+        // ---------------------------------------------------------
+
+        function goToHome() {
+            if (currentIndex === -1) return;
+            currentIndex = -1;
+            updateDisplay();
+        }
+
+        function jumpToSiswa(index) {
+            if (currentIndex === index) return;
+            currentIndex = index;
+            updateDisplay();
+        }
+
+        function jumpFromInput() {
+            const val = parseInt(jumpInput.value);
+            if (!isNaN(val) && val >= 1 && val <= dataSiswa.length) {
+                jumpToSiswa(val - 1);
+                jumpInput.value = '';
+                jumpInput.blur();
             }
         }
 
-        socket.on('connect', () => { 
-            updateDisplay(); 
+        jumpInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { jumpFromInput(); }
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                if (currentIndex < dataSiswa.length - 1) {
-                    currentIndex++;
-                    updateDisplay();
+        function renderNav() {
+            navPanel.innerHTML = '';
+            dataSiswa.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = `nav-dot ${currentIndex === i ? 'active' : ''}`;
+                dot.innerText = i + 1;
+                dot.onclick = () => jumpToSiswa(i);
+                navPanel.appendChild(dot);
+                if (currentIndex === i) {
+                    setTimeout(() => { dot.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' }); }, 100);
                 }
-            } else if (e.key === 'ArrowLeft') {
-                if (currentIndex > -1) {
-                    currentIndex--;
-                    updateDisplay();
-                }
+            });
+        }
+
+        function updateDisplay() {
+            localStorage.setItem('wisuda_pos', currentIndex);
+            renderNav();
+            if (studentSlide.style.display === 'flex') {
+                studentSlide.classList.remove('slide-enter');
+                studentSlide.classList.add('slide-exit');
+                setTimeout(changeSlideData, 300);
+            } else {
+                changeSlideData();
             }
-        });
+        }
+
+        function changeSlideData() {
+            if (currentIndex === -1) {
+                welcomeScreen.style.display = 'flex';
+                studentSlide.style.display = 'none';
+                qrSmallBox.style.display = 'none';
+                socket.emit('slide_changed', { isWelcome: true });
+            } else {
+                welcomeScreen.style.display = 'none';
+                studentSlide.style.display = 'flex';
+                qrSmallBox.style.display = 'block';
+                
+                const s = dataSiswa[currentIndex];
+                const fullName = s.nama || s.name || s.nama_siswa || '-';
+                const kelas = s.kelas || s.nama_kelas || s.rombel || s.class || '-';
+                const ortu = s.ortu || s.orang_tua || s.wali || '-';
+                const pesan = s.pesan || s.quote || s.motto || '';
+                
+                // Set data static
+                document.getElementById('kelas-siswa').innerText = kelas;
+                document.getElementById('ortu-siswa').innerText = ortu;
+                document.getElementById('pesan-siswa').innerText = pesan ? `"${pesan}"` : '';
+                document.getElementById('foto-siswa').src = s.foto || '';
+
+                // Kosongkan nama dulu agar tidak flash sebelum mengetik
+                namaSiswaEl.textContent = ""; 
+
+                // Jalankan transisi masuk slide (Focus Pull)
+                studentSlide.classList.remove('slide-exit');
+                void studentSlide.offsetWidth; // Reflow
+                studentSlide.classList.add('slide-enter');
+                
+                // --- JALANKAN ANIMASI KETIK ---
+                // Beri penundaan sedikit (misal 600ms) agar sinkron dengan efek focus pull
+                if (namaSiswaEl.typingInterval) clearInterval(namaSiswaEl.typingInterval); // Cegah overlap
+                setTimeout(() => {
+                    typingEffect(namaSiswaEl, fullName, 70); // Kecepatan: 70ms per karakter
+                }, 600);
+                // -----------------------------
+
+                socket.emit('slide_changed', { ...s, isWelcome: false });
+            }
+        }
 
         window.onload = () => {
             const host = window.location.host;
-            const remoteLink = `http://${host}/audience.html`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(remoteLink)}&margin=1`;
-            
-            document.querySelectorAll('.qr-code-img').forEach(img => {
-                img.src = qrUrl;
-            });
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent('http://'+host+'/audience.html')}&margin=1`;
+            document.querySelectorAll('.qr-code-img').forEach(img => { img.src = qrUrl; });
+            updateDisplay(); 
         };
 
-        const container = document.getElementById('reaction-container');
-        socket.on('show_reaction', (emoji) => {
+        document.addEventListener('keydown', (e) => {
+            if (document.activeElement === jumpInput) return;
+            if (e.key === 'ArrowRight' && currentIndex < dataSiswa.length - 1) { currentIndex++; updateDisplay(); }
+            else if (e.key === 'ArrowLeft' && currentIndex > -1) { currentIndex--; updateDisplay(); }
+            else if (e.key === 'Home') { goToHome(); }
+        });
+
+        function munculkanReaksi(emoji) {
+            const container = document.getElementById('reaction-container');
             const el = document.createElement('div');
             el.innerText = emoji; el.classList.add('floating-emoji');
             el.style.left = `${Math.random() * 90}%`;
-            el.style.animationDuration = `${Math.random() * 2 + 3}s`; 
+            el.style.animationDuration = `${Math.random() * 2 + 3}s`;
             container.appendChild(el);
             setTimeout(() => el.remove(), 5000);
-        });
+        }
+
+        socket.on('show_reaction', munculkanReaksi);
+        socket.on('reaction', munculkanReaksi);
+        socket.on('send_reaction', munculkanReaksi);
+        socket.on('new_reaction', munculkanReaksi);
     </script>
 </body>
 </html>

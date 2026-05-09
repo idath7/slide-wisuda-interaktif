@@ -1,33 +1,38 @@
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
+
 const app = express();
-const http = require('http').createServer(app);
-const io = require('socket.io')(http);
+const server = http.createServer(app);
+const io = new Server(server);
 
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-let slideSaatIni = null;
+// Variabel untuk menyimpan status slide terakhir
+let currentSlideData = { isWelcome: true };
 
 io.on('connection', (socket) => {
-    // Log ini akan muncul di Terminal VS Code setiap ada yang buka web
-    console.log('--- Ada Perangkat Terhubung ---');
+    console.log('A user connected');
 
-    // Kirim data terakhir jika sudah ada
-    if (slideSaatIni) {
-        console.log('Mengirim data awal ke HP:', slideSaatIni.nama);
-        socket.emit('update_mobile_slide', slideSaatIni);
-    }
+    // Kirim data slide terakhir ke user yang baru join (HP)
+    socket.emit('slide_changed', currentSlideData);
 
-    socket.on('slide_changed', (dataSiswa) => {
-        slideSaatIni = dataSiswa;
-        console.log('Slide ganti ke:', dataSiswa.nama);
-        io.emit('update_mobile_slide', dataSiswa);
+    socket.on('slide_changed', (data) => {
+        currentSlideData = data; // Simpan data terbaru
+        socket.broadcast.emit('slide_changed', data);
     });
 
-    socket.on('send_reaction', (emoji) => {
-        io.emit('show_reaction', emoji); 
+    socket.on('reaction', (emoji) => {
+        io.emit('show_reaction', emoji);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
     });
 });
 
-http.listen(3000, '0.0.0.0', () => {
-    console.log('Server AKTIF di port 3000');
+const PORT = 3000;
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

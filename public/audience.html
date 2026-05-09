@@ -1,129 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Interaktif Wisuda</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap" rel="stylesheet">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audience Reaksi - MAS WAHAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background: #f8fafc; font-family: 'Segoe UI', sans-serif; 
-            margin: 0; padding: 0; 
-            display: flex; flex-direction: column; 
-            height: 100vh; overflow: hidden; 
-        }
-        
-        .profile-card {
-            background: white; padding: 20px; 
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #020c11; color: white; margin: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            flex: 1; position: relative;
+            min-height: 100vh; text-align: center; overflow: hidden;
         }
+        .container { width: 90%; max-width: 400px; }
+
+        #welcome-info { margin-bottom: 30px; }
+        .welcome-text { font-family: 'Cinzel', serif; color: #ffd700; font-size: 1.8rem; }
+
+        /* Student Info Box */
+        #student-info { 
+            margin-bottom: 25px; display: none; 
+            flex-direction: column; align-items: center; 
+            animation: fadeIn 0.5s ease-in;
+        }
+        .foto-lingkaran {
+            width: 130px; height: 130px; border-radius: 50%;
+            border: 3px solid #ffd700; overflow: hidden;
+            margin-bottom: 15px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+        .foto-lingkaran img { width: 100%; height: 100%; object-fit: cover; }
         
-        #status-koneksi {
-            position: absolute; top: 15px;
-            font-size: 11px; font-weight: bold; 
-            padding: 5px 12px; border-radius: 20px; background: #f1f5f9;
+        #remote-nama { 
+            font-family: 'Cinzel', serif; font-size: 1.5rem; 
+            color: #ffd700; margin-bottom: 5px;
+        }
+        #remote-kelas { 
+            font-size: 0.85rem; color: #cbd5e1; letter-spacing: 2px;
+            background: rgba(255,215,0,0.1); padding: 5px 15px; border-radius: 20px;
         }
 
-        /* TAMPILAN LOBI (Welcome) */
-        #view-welcome {
-            display: flex; flex-direction: column; align-items: center; text-align: center;
+        .reaction-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+            background: rgba(255,255,255,0.03); padding: 20px;
+            border-radius: 25px; border: 1px solid rgba(255,215,0,0.15);
+            backdrop-filter: blur(10px);
         }
-        .w-title { font-family: 'Cinzel', serif; font-size: 2.2rem; color: #b8860b; margin: 0; }
-        .w-subtitle { color: #64748b; margin-top: 10px; font-size: 1rem; }
-        .w-icon { font-size: 4rem; margin-top: 15px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
-        /* TAMPILAN SISWA */
-        #view-student {
-            display: none; flex-direction: column; align-items: center; text-align: center; width: 100%;
+        .btn-reaction {
+            background: rgba(255,255,255,0.08); border: none;
+            font-size: 2.2rem; padding: 15px 5px; border-radius: 18px;
+            cursor: pointer; transition: 0.2s;
         }
-        .profile-foto { width: 140px; height: 140px; border-radius: 50%; border: 4px solid #facc15; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-top: 15px;}
-        .profile-nama { font-size: 1.5rem; margin: 15px 0 5px 0; color: #1e293b; }
-        .profile-jurusan { color: #64748b; margin: 0; font-size: 1rem; }
-
-        /* Area Tombol Reaksi */
-        .reaction-area { padding: 20px 20px 80px 20px; text-align: center; background: #f8fafc; }
-        .reaction-title { color: #475569; font-size: 0.9rem; margin-bottom: 15px; font-weight: 600; }
+        .btn-reaction:active { transform: scale(0.8); background: #ffd700; }
         
-        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; max-width: 400px; margin: 0 auto; }
-        .btn { 
-            font-size: 35px; padding: 15px 0; border: none; border-radius: 15px; 
-            background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.08); cursor: pointer;
-            transition: transform 0.1s, background 0.1s;
-        }
-        .btn:active { transform: scale(0.9); background: #e2e8f0; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .footer { margin-top: 30px; font-size: 0.6rem; color: #475569; letter-spacing: 1px; }
     </style>
 </head>
 <body>
-    
-    <div class="profile-card">
-        <div id="status-koneksi" style="color: red;">🔴 Disconnected</div>
-        
-        <div id="view-welcome">
-            <h2 class="w-title">MTS WAHID HASYIM BALUNG</h2>
-            <p class="w-subtitle">Acara Pelepasan Siswa<br>Segera Dimulai...</p>
-            <div class="w-icon">⏳</div>
+
+    <div class="container">
+        <div id="welcome-info">
+            <p class="welcome-text">MAS WAHAS</p>
+            <p style="color:#94a3b8; font-size:0.8rem">SIAP MEMBERIKAN APRESIASI</p>
         </div>
 
-        <div id="view-student">
-            <img src="https://via.placeholder.com/150" class="profile-foto" id="m-foto" alt="Siswa">
-            <h2 class="profile-nama" id="m-nama">Memuat...</h2>
-            <p class="profile-jurusan" id="m-jurusan">-</p>
+        <div id="student-info">
+            <div class="foto-lingkaran">
+                <img src="" id="remote-foto" alt="Siswa">
+            </div>
+            <div id="remote-nama">Nama Siswa</div>
+            <div id="remote-kelas">Kelas</div>
         </div>
-    </div>
 
-    <div class="reaction-area">
-        <div class="reaction-title">Beri dukungan untuk temanmu! 👇</div>
-        <div class="grid">
-            <button class="btn" onclick="sendReaction('🎉')">🎉</button>
-            <button class="btn" onclick="sendReaction('🔥')">🔥</button>
-            <button class="btn" onclick="sendReaction('❤️')">❤️</button>
-            <button class="btn" onclick="sendReaction('👏')">👏</button>
+        <div class="reaction-grid">
+            <button class="btn-reaction" onclick="sendEmoji('👏')">👏</button>
+            <button class="btn-reaction" onclick="sendEmoji('❤️')">❤️</button>
+            <button class="btn-reaction" onclick="sendEmoji('🔥')">🔥</button>
+            <button class="btn-reaction" onclick="sendEmoji('🎓')">🎓</button>
+            <button class="btn-reaction" onclick="sendEmoji('✨')">✨</button>
+            <button class="btn-reaction" onclick="sendEmoji('🥳')">🥳</button>
         </div>
+        <div class="footer">INTERACTIVE GRADUATION SYSTEM</div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
-        const statusEl = document.getElementById('status-koneksi');
-        const viewWelcome = document.getElementById('view-welcome');
-        const viewStudent = document.getElementById('view-student');
+        const welcomeInfo = document.getElementById('welcome-info');
+        const studentInfo = document.getElementById('student-info');
 
-        socket.on('connect', () => {
-            statusEl.innerText = "🟢 Connected";
-            statusEl.style.color = "green";
-        });
+        function sendEmoji(emoji) {
+            socket.emit('reaction', emoji);
+        }
 
-        socket.on('disconnect', () => {
-            statusEl.innerText = "🔴 Disconnected";
-            statusEl.style.color = "red";
-        });
+        socket.on('slide_changed', (data) => {
+            console.log("Data diterima HP:", data); // Untuk cek di inspect HP
+            
+            if (!data || data.isWelcome) {
+                welcomeInfo.style.display = 'block';
+                studentInfo.style.display = 'none';
+            } else {
+                welcomeInfo.style.display = 'none';
+                studentInfo.style.display = 'flex';
 
-        // Menerima perintah dari Layar Laptop
-        socket.on('update_mobile_slide', (data) => {
-            if (data && data.isWelcome) {
-                // Tampilkan Mode Lobi
-                viewWelcome.style.display = 'flex';
-                viewStudent.style.display = 'none';
-            } else if (data) {
-                // Tampilkan Mode Profil Siswa
-                viewWelcome.style.display = 'none';
-                viewStudent.style.display = 'flex';
+                // Pemetaan data yang fleksibel
+                document.getElementById('remote-nama').innerText = data.nama || data.name || '-';
+                document.getElementById('remote-kelas').innerText = data.kelas || data.nama_kelas || '-';
                 
-                document.getElementById('m-nama').innerText = data.nama;
-                document.getElementById('m-jurusan').innerText = data.jurusan;
-                document.getElementById('m-foto').src = data.foto;
+                // Update Foto
+                const fotoImg = document.getElementById('remote-foto');
+                if (data.foto) {
+                    fotoImg.src = data.foto;
+                    fotoImg.style.display = 'block';
+                } else {
+                    fotoImg.src = 'default-avatar.png'; // Sediakan gambar default jika foto kosong
+                }
             }
         });
-
-        function sendReaction(emoji) {
-            socket.emit('send_reaction', emoji);
-            if (navigator.vibrate) navigator.vibrate(30);
-        }
     </script>
 </body>
 </html>
