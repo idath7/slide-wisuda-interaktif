@@ -160,7 +160,7 @@
 
         window.onload = () => {
             const host = window.location.host;
-            const remoteLink = `http://${host}/remote.html`;
+            const remoteLink = `http://${host}/audience.html`;
             const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(remoteLink)}&margin=1`;
             
             document.querySelectorAll('.qr-code-img').forEach(img => {
