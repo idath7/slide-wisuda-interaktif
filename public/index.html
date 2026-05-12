@@ -3,9 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <title>Cinematic Presentation - MAS WAHAS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
     
+    
+
     <style>
+
+        /* --- FONT OFFLINE (.TTF) --- */
+
+        /* Cinzel untuk Judul & Nama */
+        @font-face {
+            font-family: 'Cinzel';
+            src: url('fonts/Cinzel-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* Montserrat untuk Teks Umum */
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { overflow: hidden; color: white; font-family: 'Montserrat', sans-serif; height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; }
 
@@ -24,7 +59,7 @@
 
         /* --- WELCOME SCREEN --- */
         #welcome-screen { text-align: center; display: none; flex-direction: column; align-items: center; }
-        .welcome-logo { width: 130px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
+        .welcome-logo { width: 150px; margin-bottom: 15px; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3)); }
         .welcome-title { font-family: 'Cinzel', serif; font-size: 4.5rem; color: #ffd700; text-shadow: 0 0 30px rgba(212, 175, 55, 0.6); margin-bottom: 5px; }
         .welcome-subtitle { font-size: 1.2rem; letter-spacing: 8px; color: #cbd5e1; text-transform: uppercase; margin-bottom: 25px; }
         
@@ -45,7 +80,7 @@
         /* --- STUDENT SLIDE --- */
         #student-slide { display: none; flex-direction: column; align-items: center; width: 100%; }
         .slide-header { text-align: center; margin-bottom: 25px; display: flex; flex-direction: column; align-items: center;}
-        .header-logo { width: 70px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));}
+        .header-logo { width: 100px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,215,0,0.3));}
         .title-main { font-family: 'Cinzel', serif; font-size: 2.2rem; color: #ffd700; letter-spacing: 4px; }
         .title-school { font-size: 1.1rem; color: #cbd5e1; text-transform: uppercase; letter-spacing: 3px; }
 
@@ -72,6 +107,26 @@
             animation: textFlashGlitch 1.5s ease-out forwards;
         }
 
+        .nis-details {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: #ffffff;
+            margin-top: -20px; /* Menarik teks agak ke atas agar tidak terlalu jauh dari nama */
+            margin-bottom: 25px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            opacity: 0; /* Disembunyikan dulu untuk animasi */
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .nis-details.show {
+            opacity: 1; /* Class ini ditambahkan lewat JS agar NIS perlahan muncul */
+        }
+    
+
+
+
+        
         @keyframes textFlashGlitch {
             0% { color: #ffd700; text-shadow: 0 0 15px rgba(255, 215, 0, 0.5); transform: scale(1); filter: contrast(1); }
             5% { color: white; text-shadow: 0 0 40px rgba(255, 255, 255, 1); transform: scale(1.02); filter: contrast(1.5); }
@@ -168,6 +223,7 @@
                 <div class="info-section">
                     
                     <h1 class="nama" id="nama-siswa"></h1>
+                    <p id="nis-siswa" class="nis-details"></p>
                     
                     <div class="data-item"><span class="label">Kelas</span><span class="value" id="kelas-siswa"></span></div>
                     <div class="data-item"><span class="label">Orang Tua</span><span class="value" id="ortu-siswa"></span></div>
@@ -184,15 +240,17 @@
 
     <div id="reaction-container"></div>
 
+    <script src="confetti.browser.min.js"></script>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
         const socket = io();
         
         // Data sementara. Nanti diganti oleh API Laravel Anda.
         const dataSiswa = [
-            { nama: "Meylinda Puspita", kelas: "XII DKV 1", ortu: "Bpk. Ahmad Subarjo", pesan: "Motivasi terbesar dalam kehidupan adalah diri sendiri. Teruslah melangkah maju.", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500" },
-            { nama: "Rizky Ramadhan", kelas: "XII TKJ 2", ortu: "Bpk. M. Mansyur", pesan: "Terima kasih kepada bapak ibu guru yang tak lelah membimbing kami. Sukses selalu!", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500" }
-        ];
+        { nama: "Meylinda Puspita", nisn: "0022458745", nis: "000001", kelas: "XII DKV 1", ortu: "Bpk. Ahmad Subarjo", pesan: "Motivasi terbesar dalam kehidupan adalah diri sendiri. Teruslah melangkah maju.", foto: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500" },
+        { nama: "Rizky Ramadhan", nisn: "0033123456", nis: "000002", kelas: "XII TKJ 2", ortu: "Bpk. M. Mansyur", pesan: "Terima kasih kepada bapak ibu guru yang tak lelah membimbing kami. Sukses selalu!", foto: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500" }
+            ];
 
         let currentIndex = localStorage.getItem('wisuda_pos') ? parseInt(localStorage.getItem('wisuda_pos')) : -1;
 
@@ -223,12 +281,11 @@
         // ---------------------------------------------------------
         // LOGIKA ANIMASI KETIK (TYPEWRITER) BARU
         // ---------------------------------------------------------
-        function typingEffect(element, text, speed) {
-            element.textContent = ""; // Bersihkan dulu
-            element.classList.remove('typing-finished'); // Reset kelas animasi akhir
+        function typingEffect(element, text, speed, callback) {
+            element.textContent = ""; 
+            element.classList.remove('typing-finished'); 
             
             let i = 0;
-            // Hapus interval sebelumnya jika operator bergerak terlalu cepat
             if (element.typingInterval) clearInterval(element.typingInterval);
             
             element.typingInterval = setInterval(() => {
@@ -236,10 +293,9 @@
                     element.textContent += text.charAt(i);
                     i++;
                 } else {
-                    // Pengetikan selesai
                     clearInterval(element.typingInterval);
-                    // Tambahkan kelas untuk memicu efek kilau akhir (CSS)
                     element.classList.add('typing-finished');
+                    if (callback) callback(); // <--- Eksekusi pemunculan NIS di sini
                 }
             }, speed);
         }
@@ -309,6 +365,8 @@
                 
                 const s = dataSiswa[currentIndex];
                 const fullName = s.nama || s.name || s.nama_siswa || '-';
+                const nisn = s.nisn || '-';
+                const nis = s.nis || '-';
                 const kelas = s.kelas || s.nama_kelas || s.rombel || s.class || '-';
                 const ortu = s.ortu || s.orang_tua || s.wali || '-';
                 const pesan = s.pesan || s.quote || s.motto || '';
@@ -322,6 +380,10 @@
                 // Kosongkan nama dulu agar tidak flash sebelum mengetik
                 namaSiswaEl.textContent = ""; 
 
+                const nisSiswaEl = document.getElementById('nis-siswa');
+                nisSiswaEl.classList.remove('show');
+                nisSiswaEl.innerText = `NISN ${nisn} | NIS ${nis}`;
+
                 // Jalankan transisi masuk slide (Focus Pull)
                 studentSlide.classList.remove('slide-exit');
                 void studentSlide.offsetWidth; // Reflow
@@ -331,12 +393,22 @@
                 // Beri penundaan sedikit (misal 600ms) agar sinkron dengan efek focus pull
                 if (namaSiswaEl.typingInterval) clearInterval(namaSiswaEl.typingInterval); // Cegah overlap
                 setTimeout(() => {
-                    typingEffect(namaSiswaEl, fullName, 70); // Kecepatan: 70ms per karakter
+                    typingEffect(namaSiswaEl, fullName, 70, () => {
+                        nisSiswaEl.classList.add('show'); // NIS muncul setelah nama selesai diketik
+                    }); 
                 }, 600);
                 // -----------------------------
 
                 socket.emit('slide_changed', { ...s, isWelcome: false });
+
+                // Tambahkan pemicu konfeti di sini
+            if (!s.isWelcome) { // Konfeti hanya muncul jika bukan layar welcome
+                triggerConfetti();
             }
+
+            }
+
+            
         }
 
         window.onload = () => {
@@ -361,6 +433,40 @@
             el.style.animationDuration = `${Math.random() * 2 + 3}s`;
             container.appendChild(el);
             setTimeout(() => el.remove(), 5000);
+        }
+
+        function triggerConfetti() {
+            const duration = 3 * 1000; // Durasi hujan konfeti (3 detik)
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 5 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+
+                const particleCount = 70 * (timeLeft / duration);
+                
+                // Tembakan konfeti dari sisi kiri
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                  //  colors: ['#d4af37', '#f4e0af', '#ffffff'] // Warna emas dan putih
+                }));
+                
+                // Tembakan konfeti dari sisi kanan
+                confetti(Object.assign({}, defaults, { 
+                    particleCount, 
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    //colors: ['#d4af37', '#f4e0af', '#ffffff']
+                }));
+            }, 250);
         }
 
         socket.on('show_reaction', munculkanReaksi);

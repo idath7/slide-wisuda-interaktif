@@ -4,8 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audience Reaksi - MAS WAHAS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Cinzel:wght@700&display=swap" rel="stylesheet">
+    
+    
+    
     <style>
+
+        /* --- FONT OFFLINE (.TTF) --- */
+
+        /* Cinzel untuk Judul & Nama */
+        @font-face {
+            font-family: 'Cinzel';
+            src: url('fonts/Cinzel-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* Montserrat untuk Teks Umum */
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-Regular.ttf') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-SemiBold.ttf') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             background: #020c11; color: white; margin: 0;
@@ -23,13 +58,25 @@
             flex-direction: column; align-items: center; 
             animation: fadeIn 0.5s ease-in;
         }
-        .foto-lingkaran {
-            width: 130px; height: 130px; border-radius: 50%;
-            border: 3px solid #ffd700; overflow: hidden;
-            margin-bottom: 15px; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-        }
-        .foto-lingkaran img { width: 100%; height: 100%; object-fit: cover; }
         
+        /* Perubahan Gaya Foto dari Lingkaran ke Kotak 4x6 Rounded */
+        .foto-box-siswa {
+            width: 140px; 
+            height: 210px; /* Rasio 4:6 */
+            border-radius: 15px; /* Sudut melengkung */
+            border: 3px solid #ffd700; /* Bingkai emas */
+            overflow: hidden;
+            margin-bottom: 15px; 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 215, 0, 0.2);
+            background: #1a1a1a;
+        }
+
+        .foto-box-siswa img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Memastikan foto memenuhi kotak tanpa gepeng */
+        }
+
         #remote-nama { 
             font-family: 'Cinzel', serif; font-size: 1.5rem; 
             color: #ffd700; margin-bottom: 5px;
@@ -53,7 +100,145 @@
         .btn-reaction:active { transform: scale(0.8); background: #ffd700; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .footer { margin-top: 30px; font-size: 0.6rem; color: #475569; letter-spacing: 1px; }
+        
+                /* Container Utama Footer */
+        .footer {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        /* Baris Pertama: Sistem */
+        .footer-line-1 {
+            font-size: 0.6rem; /* Silakan ubah ukuran ini */
+            color: #64748b;    /* Silakan ubah warna ini (Abu-abu kebiruan) */
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        /* Baris Kedua: Nama Sekolah & Tahun */
+        .footer-line-2 {
+            font-size: 0.75rem; /* Silakan ubah ukuran ini */
+            color: #ffd700;    /* Silakan ubah warna ini (Emas) */
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+    
+        /* Animasi untuk emoji melayang di layar HP */
+        .floating-emoji-mobile {
+            position: absolute;
+            font-size: 2.5rem; /* Ukuran emoji melayang */
+            pointer-events: none; /* Agar tidak menutupi tombol lain */
+            animation: floatUpMobile 1.5s ease-out forwards;
+            z-index: 9999;
+        }
+
+        @keyframes floatUpMobile {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-80px) scale(1.2);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(-150px) scale(1);
+                opacity: 0;
+            }
+        }
+    
+                        /* Indikator Live */
+                /* Indikator Live Hijau */
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 255, 0, 0.15); /* Hijau transparan */
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            
+            /* Menaikkan Posisi */
+            margin-top: -100px; /* Angka negatif ini yang menarik posisi ke atas */
+            margin-bottom: 60px; /* Jarak ke foto di bawahnya */
+            
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #2ecc71; /* Hijau Segar */
+            letter-spacing: 1.5px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .dot {
+            height: 8px;
+            width: 8px;
+            background-color: #2ecc71;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #2ecc71;
+            animation: pulse-live-green 1.5s infinite;
+        }
+
+        /* Animasi Pulse Warna Hijau */
+        @keyframes pulse-live-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+            }
+        }
+    
+        /* Animasi Fade In untuk elemen selain nama */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in-element.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Style tambahan untuk Nama agar mendukung efek mengetik */
+        #remote-nama {
+            min-height: 1.8rem; /* Mencegah layout bergeser saat teks kosong */
+        }
+
+        /* Judul/Instruksi Kotak Reaksi */
+        .reaction-instruction {
+            font-size: 0.7rem;
+            color: #94a3b8; /* Warna abu-abu lembut */
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            text-transform: uppercase;
+            /* Memberikan sedikit garis di kiri dan kanan teks (opsional) */
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .reaction-instruction::before,
+        .reaction-instruction::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(148, 163, 184, 0.2);
+            margin: 0 10px;
+        }
+
+
     </style>
 </head>
 <body>
@@ -65,22 +250,35 @@
         </div>
 
         <div id="student-info">
-            <div class="foto-lingkaran">
+            <div class="live-indicator fade-in-element">
+                <span class="dot"></span> LIVE SEKARANG
+            </div>
+
+            <div class="foto-box-siswa fade-in-element">
                 <img src="" id="remote-foto" alt="Siswa">
             </div>
+            
             <div id="remote-nama">Nama Siswa</div>
-            <div id="remote-kelas">Kelas</div>
+            <div id="remote-kelas" class="fade-in-element">Kelas</div>
         </div>
 
+        <div class="reaction-instruction">KETUK UNTUK MEMBERIKAN APRESIASI</div>
+
         <div class="reaction-grid">
-            <button class="btn-reaction" onclick="sendEmoji('👏')">👏</button>
-            <button class="btn-reaction" onclick="sendEmoji('❤️')">❤️</button>
-            <button class="btn-reaction" onclick="sendEmoji('🔥')">🔥</button>
-            <button class="btn-reaction" onclick="sendEmoji('🎓')">🎓</button>
-            <button class="btn-reaction" onclick="sendEmoji('✨')">✨</button>
-            <button class="btn-reaction" onclick="sendEmoji('🥳')">🥳</button>
+            <button class="btn-reaction" onclick="sendEmoji('👏', this)">👏</button>
+            <button class="btn-reaction" onclick="sendEmoji('❤️', this)">❤️</button>
+            <button class="btn-reaction" onclick="sendEmoji('🔥', this)">🔥</button>
+            <button class="btn-reaction" onclick="sendEmoji('🎓', this)">🎓</button>
+            <button class="btn-reaction" onclick="sendEmoji('✨', this)">✨</button>
+            <button class="btn-reaction" onclick="sendEmoji('🥳', this)">🥳</button>
         </div>
-        <div class="footer">INTERACTIVE GRADUATION SYSTEM</div>
+        
+
+
+        <div class="footer">
+            <div class="footer-line-1">INTERACTIVE GRADUATION SYSTEM</div>
+            <div class="footer-line-2">MAS WAHID HASYIM BALUNG 2026</div>
+        </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -89,34 +287,120 @@
         const welcomeInfo = document.getElementById('welcome-info');
         const studentInfo = document.getElementById('student-info');
 
-        function sendEmoji(emoji) {
+        // Opsional: Menyembunyikan tanda live jika koneksi terputus
+        socket.on('disconnect', () => {
+            const liveInd = document.querySelector('.live-indicator');
+            if(liveInd) liveInd.style.opacity = '0.3'; // Meredup jika putus
+        });
+
+        socket.on('connect', () => {
+            const liveInd = document.querySelector('.live-indicator');
+            if(liveInd) liveInd.style.opacity = '1'; // Terang kembali jika terhubung
+        });
+
+        // batas akhir code Opsional: Menyembunyikan tanda live jika koneksi terputus
+
+        function sendEmoji(emoji, btnElement) {
+            // 1. Kirim emoji ke server/proyektor
             socket.emit('reaction', emoji);
+            
+            // 2. Panggil fungsi animasi melayang di HP
+            showFloatingEmojiMobile(emoji, btnElement);
+            
+            // 3. (Opsional) Berikan efek getar saat ditekan
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
         }
 
-        socket.on('slide_changed', (data) => {
-            console.log("Data diterima HP:", data); // Untuk cek di inspect HP
-            
-            if (!data || data.isWelcome) {
-                welcomeInfo.style.display = 'block';
-                studentInfo.style.display = 'none';
-            } else {
-                welcomeInfo.style.display = 'none';
-                studentInfo.style.display = 'flex';
+        function showFloatingEmojiMobile(emoji, buttonElement) {
+        const floatingEl = document.createElement('div');
+        floatingEl.classList.add('floating-emoji-mobile');
+        floatingEl.innerText = emoji;
 
-                // Pemetaan data yang fleksibel
-                document.getElementById('remote-nama').innerText = data.nama || data.name || '-';
-                document.getElementById('remote-kelas').innerText = data.kelas || data.nama_kelas || '-';
-                
-                // Update Foto
-                const fotoImg = document.getElementById('remote-foto');
-                if (data.foto) {
-                    fotoImg.src = data.foto;
-                    fotoImg.style.display = 'block';
+        // Dapatkan posisi tombol yang ditekan di layar
+        const rect = buttonElement.getBoundingClientRect();
+        
+        // Atur posisi awal emoji persis di atas tombol yang ditekan
+        floatingEl.style.left = `${rect.left + (rect.width / 2) - 20}px`; 
+        floatingEl.style.top = `${rect.top}px`;
+
+        // Tambahkan ke dalam body
+        document.body.appendChild(floatingEl);
+
+        // Hapus elemen dari HTML setelah animasi selesai (1.5 detik)
+        setTimeout(() => {
+            floatingEl.remove();
+        }, 1500);
+        }
+
+        function typingEffect(element, text, speed, callback) {
+            element.textContent = ""; 
+            let i = 0;
+            
+            // Hapus interval lama jika ada (untuk mencegah overlap)
+            if (element.typingInterval) clearInterval(element.typingInterval);
+            
+            element.typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
                 } else {
-                    fotoImg.src = 'default-avatar.png'; // Sediakan gambar default jika foto kosong
+                    clearInterval(element.typingInterval);
+                    if (callback) callback();
                 }
-            }
-        });
+            }, speed);
+        }
+
+
+
+       socket.on('slide_changed', (data) => {
+    if (!data || data.isWelcome) {
+        welcomeInfo.style.display = 'block';
+        studentInfo.style.display = 'none';
+    } else {
+        welcomeInfo.style.display = 'none';
+        studentInfo.style.display = 'flex';
+
+        const nameEl = document.getElementById('remote-nama');
+        const classEl = document.getElementById('remote-kelas');
+        const fotoEl = document.querySelector('.foto-box-siswa'); // atau .foto-lingkaran sesuai pilihan Anda
+        const liveInd = document.querySelector('.live-indicator');
+        const fotoImg = document.getElementById('remote-foto');
+
+        // 1. Reset tampilan (sembunyikan dulu)
+        nameEl.textContent = "";
+        classEl.classList.remove('show');
+        classEl.classList.add('fade-in-element');
+        fotoEl.classList.remove('show');
+        fotoEl.classList.add('fade-in-element');
+        if(liveInd) {
+            liveInd.classList.remove('show');
+            liveInd.classList.add('fade-in-element');
+        }
+
+        // 2. Update Data Foto & Teks (di balik layar)
+        const fullName = data.nama || data.name || '-';
+        const className = data.kelas || data.nama_kelas || '-';
+        fotoImg.src = data.foto || 'default-avatar.png';
+
+        // 3. Jalankan Urutan Animasi
+        // A. Mulai efek mengetik Nama
+        setTimeout(() => {
+            typingEffect(nameEl, fullName, 50, () => {
+                // B. Setelah nama selesai, munculkan foto, kelas, dan indikator LIVE
+                fotoEl.classList.add('show');
+                classEl.classList.add('show');
+                if(liveInd) liveInd.classList.add('show');
+                
+                // Berikan teks ke kelas
+                classEl.innerText = className;
+            });
+        }, 300); // Delay sedikit agar perpindahan terasa halus
+    }
+});
+
+
     </script>
 </body>
 </html>
